@@ -20,9 +20,9 @@ app.use(urlencoded({ extended: true }));
 let verifyTokenMiddleware = auth.verifyToken();
 
 // api routes
-app.use("/pt2/api/login", loginRouter);
-app.use("/pt2/api/users", verifyTokenMiddleware, usersRouter);
-app.use("/pt2/api/cars", verifyTokenMiddleware, carsRouter);
+app.use("/myevride/api/login", loginRouter);
+app.use("/myevride/api/users", verifyTokenMiddleware, usersRouter);
+app.use("/myevride/api/cars", carsRouter);
 
 if (app.get('env') === 'production') {
 
