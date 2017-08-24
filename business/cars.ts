@@ -13,3 +13,10 @@ export function getCar(id: number): Promise<any> {
     return db.querySingle("SELECT * FROM asset WHERE id=?", [id]).then(res => res[0]);
 }
 
+export function saveCar(user: any, car: any) {
+    if (car.id) {
+        return db.querySingle("UPDATE asset SET ? WHERE id=?",[car, car.id]);
+    } else {
+        return db.querySingle("INSERT INTO asset SET ?", [car]);
+    }
+}

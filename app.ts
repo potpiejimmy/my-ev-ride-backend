@@ -3,8 +3,9 @@ import { json, urlencoded } from 'body-parser';
 import * as compression from 'compression';
 
 import { loginRouter } from "./routes/login";
-import { usersRouter } from "./routes/users";
 import { carsRouter } from "./routes/cars";
+import { usersRouter } from "./routes/users";
+import { assetsRouter } from "./routes/assets";
 
 import * as auth from "./util/auth";
 
@@ -28,8 +29,9 @@ let verifyTokenMiddleware = auth.verifyToken();
 
 // api routes
 app.use("/myevride/api/login", loginRouter);
-app.use("/myevride/api/users", verifyTokenMiddleware, usersRouter);
 app.use("/myevride/api/cars", carsRouter);
+app.use("/myevride/api/users", verifyTokenMiddleware, usersRouter);
+app.use("/myevride/api/assets", verifyTokenMiddleware, assetsRouter);
 
 if (app.get('env') === 'production') {
 
