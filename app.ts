@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { json, urlencoded } from 'body-parser';
 import * as compression from 'compression';
+import * as passport from 'passport';
 
 import { loginRouter } from "./routes/login";
 import { carsRouter } from "./routes/cars";
@@ -16,6 +17,7 @@ app.disable('x-powered-by');
 app.use(json());
 app.use(compression());
 app.use(urlencoded({ extended: true }));
+app.use(passport.initialize());
 
 // add CORS headers
 app.use(function(req, res, next) {
