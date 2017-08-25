@@ -14,6 +14,7 @@ export function getCar(id: number): Promise<any> {
 }
 
 export function saveCar(user: any, car: any) {
+    car.user_name = user.name;
     if (car.id) {
         return db.querySingle("UPDATE asset SET ? WHERE id=?",[car, car.id]);
     } else {

@@ -5,12 +5,14 @@ import * as db from "../util/db";
 export function login(user: string, password: string): Promise<any> {
     return db.querySingle("select * from user where name=?",[user]).then(res => {
         let user = res[0];
-        if (user && crypto.createHash('md5').update(password).digest("hex") == user.password) {
-            console.info("Login successful");
-            return authenticate(user);
-        } else {
-            return {"result": "Sorry, wrong password."};
-        }
+        if (user) return {token: auth.createToken(user)};
+        else return {"result": "Sorry, wrong password."};
+        // if (user && crypto.createHash('md5').update(password).digest("hex") == user.password) {
+        //     console.info("Login successful");
+        //     return authenticate(user);
+        // } else {
+        //     return {"result": "Sorry, wrong password."};
+        // }
     });        
 }
 
