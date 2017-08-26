@@ -29,7 +29,9 @@ function authenticate(user): Promise<any> {
 //    return db.querySingle("select role from user_role where user_name=?", [user.name]).then(res => {
         let roles = [];
 //        res.forEach(e => roles.push(e.role));
+        if ('admin' === user.name) roles.push('admin');
         user.roles = roles;
+        delete user.password;
         let token = auth.createToken(user);
         return Promise.resolve({token:token});//return {token:token};
 //    });

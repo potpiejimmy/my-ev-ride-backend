@@ -13,6 +13,10 @@ export function getCar(id: number): Promise<any> {
     return db.querySingle("SELECT * FROM asset WHERE id=?", [id]).then(res => res[0]);
 }
 
+export function getCarsForUser(user: any) {
+    return db.querySingle("SELECT * FROM asset WHERE user_name=?", [user.name]);
+}
+
 export function saveCar(user: any, car: any) {
     car.user_name = user.name;
     if (car.id) {
@@ -20,4 +24,11 @@ export function saveCar(user: any, car: any) {
     } else {
         return db.querySingle("INSERT INTO asset SET ?", [car]);
     }
+}
+
+export function deleteCar(user: any, id: number) {
+    return getCar(id).then(car => {
+        if (user.name !== car.user_name) return;
+        return db.querySingle("DELETE FROM asset WHERE id=?", [id]);
+    })
 }
