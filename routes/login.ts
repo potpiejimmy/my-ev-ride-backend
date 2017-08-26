@@ -80,7 +80,7 @@ var GoogleStrategy = require('passport-google-oauth20').Strategy;
 passport.use(new GoogleStrategy({
     clientID: config.googleAuthClientId,
     clientSecret: config.googleAuthClientSecret,
-    callbackURL: "/myevride/api/login/google/callback"
+    callbackURL: (process.env.API_ORIGIN ? process.env.API_ORIGIN : '') + "/myevride/api/login/google/callback"
   }, (accessToken, refreshToken, profile, cb) => {
       return cb(null, profile.emails[0].value);
   }
