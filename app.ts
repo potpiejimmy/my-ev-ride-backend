@@ -8,8 +8,6 @@ import { carsRouter } from "./routes/cars";
 import { usersRouter } from "./routes/users";
 import { assetsRouter } from "./routes/assets";
 
-import * as auth from "./util/auth";
-
 const app: express.Application = express();
 
 app.disable('x-powered-by');
@@ -21,13 +19,14 @@ app.use(passport.initialize());
 
 // add CORS headers
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Origin", req.headers.origin); // XXX do not allow all origins for production
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
 
 // verifies the jwt for protected API routes
-let verifyTokenMiddleware = auth.verifyToken();
+let verifyTokenMiddleware = passport.authenticate('jwt', { session: false });
 
 // api routes
 app.use("/myevride/api/login", loginRouter);
@@ -48,7 +47,7 @@ app.use(function(req: express.Request, res: express.Response, next) {
 // production error handler
 // no stacktrace leaked to user
 app.use(function(err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
-
+  console.log(err);
   res.status(err.status || 500);
   res.json({
     error: {},
