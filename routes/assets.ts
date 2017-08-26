@@ -6,7 +6,7 @@ const assetsRouter: Router = Router();
 /**
  * saveCar(user, car)
  */
-assetsRouter.post("/", function (request: any, response: Response, next: NextFunction) {
+assetsRouter.post("/", function (request: Request, response: Response, next: NextFunction) {
     Cars.saveCar(request.user, request.body)
     .then(res => response.json(res))
     .catch(err => next(err));

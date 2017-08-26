@@ -60,19 +60,6 @@ loginRouter.get('/google/callback', passport.authenticate('google', { failureRed
 passport.serializeUser((user, cb) => {cb(null, user);});
 passport.deserializeUser((obj, cb) => {cb(null, obj);});
 
-// --- Passport: JWT ---
-
-var JwtStrategy = require('passport-jwt').Strategy,
-    ExtractJwt = require('passport-jwt').ExtractJwt;
-
-passport.use(new JwtStrategy({
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: config.jwtSecret,
-        issuer: 'my-ev-ride.com'
-    }, (jwt_payload, done) => { 
-        return done(null, jwt_payload);
-}));
-
 // --- Passport: Google Login ---
 
 var GoogleStrategy = require('passport-google-oauth20').Strategy;

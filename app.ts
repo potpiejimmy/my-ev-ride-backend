@@ -8,6 +8,8 @@ import { carsRouter } from "./routes/cars";
 import { usersRouter } from "./routes/users";
 import { assetsRouter } from "./routes/assets";
 
+import * as auth from "./util/auth";
+
 const app: express.Application = express();
 
 app.disable('x-powered-by');
@@ -26,7 +28,7 @@ app.use(function(req, res, next) {
 });
 
 // verifies the jwt for protected API routes
-let verifyTokenMiddleware = passport.authenticate('jwt', { session: false });
+let verifyTokenMiddleware = auth.verifyToken();
 
 // api routes
 app.use("/myevride/api/login", loginRouter);
