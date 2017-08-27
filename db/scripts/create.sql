@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `asset` (
   `sharecount` SMALLINT NOT NULL,
   `infotext` VARCHAR(4096) NULL,
   `location` VARCHAR(255) NULL,
+  `teasertext` VARCHAR(1024) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_asset_user_idx` (`user_id` ASC),
   CONSTRAINT `fk_asset_user`
