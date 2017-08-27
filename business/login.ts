@@ -2,9 +2,8 @@ import * as crypto from "crypto";
 import * as auth from "../util/auth";
 import * as db from "../util/db";
 
-export function login(user: string, password: string): Promise<any> {
-    return db.querySingle("select * from user where name=?",[user]).then(res => {
-        let user = res[0];
+export function login(username: string, password: string): Promise<any> {
+    return findUser(username).then(user => {
         if (user && crypto.createHash('md5').update(password || '').digest("hex") == user.password) {
             console.info("Login successful");
             return authenticate(user);
@@ -15,25 +14,34 @@ export function login(user: string, password: string): Promise<any> {
 }
 
 export function loginCreate(user: any): Promise<any> {
-    return db.querySingle("select * from user where name=?",[user.name]).then(res => {
-        let found = res[0];
+    return findUser(user.name).then(found => {
         if (found) return authenticate(found);
         // insert new user
-        return db.querySingle("insert into user set ?", [user]).then(() => readAndAuthenticate(user.name));
+        return insertUser(user).then(() => readAndAuthenticate(user.name));
     });        
 }
 
 export function register(user: any): Promise<any> {
-    // insert new user
-    user.password = crypto.createHash('md5').update(user.password).digest("hex");
-    delete user.roles;
-    return db.querySingle("insert into user set ?", [user]).then(() => readAndAuthenticate(user.name));
+    return findUser(user.name).then(found => {
+        if (found) return {"result": "Sorry, the user name is already in use."};
+        // insert new user
+        if (!user.password || user.password.length < 8) return {"result": "Sorry, bad password"};
+        user.password = crypto.createHash('md5').update(user.password).digest("hex");
+        delete user.roles;
+        return insertUser(user).then(() => readAndAuthenticate(user.name));
+    });
+}
+
+function findUser(username: string): Promise<any> {
+    return db.querySingle("select * from user where name=?",[username]).then(res => res[0]);
+}
+
+function insertUser(user: any): Promise<any> {
+    return db.querySingle("insert into user set ?", [user]);
 }
 
 function readAndAuthenticate(username: string): Promise<any> {
-    return db.querySingle("select * from user where name=?",[username]).then(user => {
-        return authenticate(user[0]);
-    });
+    return findUser(username).then(user => authenticate(user));
 }
 
 function authenticate(user): any {
