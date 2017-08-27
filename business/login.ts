@@ -19,10 +19,21 @@ export function loginCreate(user: any): Promise<any> {
         let found = res[0];
         if (found) return authenticate(found);
         // insert new user
-        return db.querySingle("insert into user set ?", [user]).then(() => {
-            return authenticate(user);
-        });
+        return db.querySingle("insert into user set ?", [user]).then(() => readAndAuthenticate(user.name));
     });        
+}
+
+export function register(user: any): Promise<any> {
+    // insert new user
+    user.password = crypto.createHash('md5').update(user.password).digest("hex");
+    delete user.roles;
+    return db.querySingle("insert into user set ?", [user]).then(() => readAndAuthenticate(user.name));
+}
+
+function readAndAuthenticate(username: string): Promise<any> {
+    return db.querySingle("select * from user where name=?",[username]).then(user => {
+        return authenticate(user[0]);
+    });
 }
 
 function authenticate(user): any {

@@ -26,6 +26,15 @@ loginRouter.post("/", function (request: Request, response: Response, next: Next
     .catch(err => next(err));
 });
 
+/*
+ * Register a new user
+ */
+loginRouter.post("/register", function (request: Request, response: Response, next: NextFunction) {
+    Login.register(request.body)
+    .then(res => response.json(res))
+    .catch(err => next(err));
+});
+
 /**
  * Sign in by returnig pre-authenticated session jwt (Google and Facebook login)
  */
@@ -70,7 +79,7 @@ passport.use(new GoogleStrategy({
     clientSecret: config.googleAuthClientSecret,
     callbackURL: (process.env.API_ORIGIN ? process.env.API_ORIGIN : '') + "/myevride/api/login/google/callback"
   }, (accessToken, refreshToken, profile, cb) => {
-      console.log(JSON.stringify(profile));
+//      console.log(JSON.stringify(profile));
       let user = {
           name: profile.emails[0].value,
           email: profile.emails[0].value,
