@@ -7,11 +7,16 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- Table `user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `user` (
-  `name` VARCHAR(64) NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(128) NOT NULL,
   `type` TINYINT NOT NULL DEFAULT 0,
+  `roles` VARCHAR(255) NOT NULL DEFAULT 'user',
   `password` VARCHAR(32) NULL,
   `pw_status` TINYINT NOT NULL DEFAULT 0,
-  PRIMARY KEY (`name`))
+  `email` VARCHAR(128) NULL,
+  `display_name` VARCHAR(128) NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
 ENGINE = InnoDB;
 
 
@@ -20,7 +25,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `asset` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `user_name` VARCHAR(64) NOT NULL,
+  `user_id` INT NOT NULL,
   `make` VARCHAR(64) NOT NULL,
   `model` VARCHAR(128) NOT NULL,
   `image` VARCHAR(64) NOT NULL,
@@ -32,10 +37,10 @@ CREATE TABLE IF NOT EXISTS `asset` (
   `infotext` VARCHAR(4096) NULL,
   `location` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_asset_user_idx` (`user_name` ASC),
+  INDEX `fk_asset_user_idx` (`user_id` ASC),
   CONSTRAINT `fk_asset_user`
-    FOREIGN KEY (`user_name`)
-    REFERENCES `user` (`name`)
+    FOREIGN KEY (`user_id`)
+    REFERENCES `user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

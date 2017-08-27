@@ -14,11 +14,11 @@ export function getCar(id: number): Promise<any> {
 }
 
 export function getCarsForUser(user: any) {
-    return db.querySingle("SELECT * FROM asset WHERE user_name=?", [user.name]);
+    return db.querySingle("SELECT * FROM asset WHERE user_id=?", [user.id]);
 }
 
 export function saveCar(user: any, car: any) {
-    car.user_name = user.name;
+    car.user_id = user.id;
     if (car.id) {
         return db.querySingle("UPDATE asset SET ? WHERE id=?",[car, car.id]);
     } else {
@@ -28,7 +28,7 @@ export function saveCar(user: any, car: any) {
 
 export function deleteCar(user: any, id: number) {
     return getCar(id).then(car => {
-        if (user.name !== car.user_name) return;
+        if (user.id !== car.user_id) return;
         return db.querySingle("DELETE FROM asset WHERE id=?", [id]);
     })
 }

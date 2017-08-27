@@ -14,25 +14,20 @@ export function login(user: string, password: string): Promise<any> {
     });        
 }
 
-export function loginCreate(username: string): Promise<any> {
-    return db.querySingle("select * from user where name=?",[username]).then(res => {
-        let user = res[0];
-        if (user) return authenticate(user);
-        user = {name: username};
+export function loginCreate(user: any): Promise<any> {
+    return db.querySingle("select * from user where name=?",[user.name]).then(res => {
+        let found = res[0];
+        if (found) return authenticate(found);
+        // insert new user
         return db.querySingle("insert into user set ?", [user]).then(() => {
             return authenticate(user);
         });
     });        
 }
 
-function authenticate(user): Promise<any> {
-//    return db.querySingle("select role from user_role where user_name=?", [user.name]).then(res => {
-        let roles = [];
-//        res.forEach(e => roles.push(e.role));
-        if ('admin' === user.name) roles.push('admin');
-        user.roles = roles;
-        delete user.password;
-        let token = auth.createToken(user);
-        return Promise.resolve({token:token});//return {token:token};
-//    });
+function authenticate(user): any {
+    user.roles = user.roles.split(','); // roles as array
+    delete user.password;
+    let token = auth.createToken(user);
+    return {token:token};
 }

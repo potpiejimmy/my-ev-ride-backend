@@ -46,6 +46,7 @@ loginRouter.get('/google',
 
 // --- login with Google callback ---
 loginRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+    // create user from google profile information
     Login.loginCreate(req.user)
         .then(token => {
             // store token temporarily in session
@@ -69,7 +70,13 @@ passport.use(new GoogleStrategy({
     clientSecret: config.googleAuthClientSecret,
     callbackURL: (process.env.API_ORIGIN ? process.env.API_ORIGIN : '') + "/myevride/api/login/google/callback"
   }, (accessToken, refreshToken, profile, cb) => {
-      return cb(null, profile.emails[0].value);
+      console.log(JSON.stringify(profile));
+      let user = {
+          name: profile.emails[0].value,
+          email: profile.emails[0].value,
+          display_name: profile.displayName
+      }
+      return cb(null, user);
   }
 ));
 
