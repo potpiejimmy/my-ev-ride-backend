@@ -2,11 +2,11 @@ import * as db from "../util/db";
 import * as utils from "../util/utils";
 
 /**
- * Returns the list of all cars
+ * Returns the list of all cars ordered by distance
  * @return list of cars
  */
-export function getCars(): Promise<any> {
-    return db.querySingle("SELECT * FROM asset");
+export function getCars(lon: number, lat: number): Promise<any> {
+    return db.querySingle("SELECT * FROM asset ORDER BY (POW((lon-?),2) + POW((lat-?),2))",[lon,lat]);
 }
 
 export function getCar(id: number): Promise<any> {
