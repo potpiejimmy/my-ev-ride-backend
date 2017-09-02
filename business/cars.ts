@@ -18,17 +18,18 @@ export function getCarsForUser(user: any) {
 }
 
 export function saveCar(user: any, car: any) {
-    car.user_id = user.id;
     if (car.id) {
+        if (user.id !== car.user_id) throw "You are trying to update a car that is not yours.";
         return db.querySingle("UPDATE asset SET ? WHERE id=?",[car, car.id]);
     } else {
+        car.user_id = user.id;
         return db.querySingle("INSERT INTO asset SET ?", [car]);
     }
 }
 
 export function deleteCar(user: any, id: number) {
     return getCar(id).then(car => {
-        if (user.id !== car.user_id) return;
+        if (user.id !== car.user_id) throw "You are trying to delete a car that is not yours.";
         return db.querySingle("DELETE FROM asset WHERE id=?", [id]);
     })
 }
