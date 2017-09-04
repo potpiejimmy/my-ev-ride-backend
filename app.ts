@@ -1,9 +1,8 @@
-var nocache = require('nocache')
-
 import * as express from 'express';
 import { json, urlencoded } from 'body-parser';
 import * as compression from 'compression';
 import * as passport from 'passport';
+import * as nocache from 'nocache';
 
 import { loginRouter } from "./routes/login";
 import { carsRouter } from "./routes/cars";
