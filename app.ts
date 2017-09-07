@@ -50,7 +50,7 @@ app.use("/myevride/api/users", verifyTokenMiddleware, usersRouter);
 app.use("/myevride/api/assets", verifyTokenMiddleware, assetsRouter);
 
 if (app.get('env') === 'production') {
-
+  app.set('trust proxy', 1) // trust first proxy, allows sending secure cookies even if SSL terminated on proxy  
 }
 
 // catch 404 and forward to error handler
