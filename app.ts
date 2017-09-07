@@ -21,10 +21,20 @@ app.use(compression());
 app.use(urlencoded({ extended: true }));
 app.use(passport.initialize());
 
+// Allow origins only from the following domains:
+let corsWhitelist = [
+  'http://localhost:4200',
+  'https://thliese.net',
+  'https://www.siedentopf.xyz',
+  'https://www.my-ev-ride.com'
+]
+
 // add CORS headers
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Origin", req.headers.origin); // XXX do not allow all origins for production
+  if (corsWhitelist.indexOf(req.headers.origin) !== -1) {
+    res.header("Access-Control-Allow-Origin", req.headers.origin); // only allow white-listed origins
+  }
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
   next();

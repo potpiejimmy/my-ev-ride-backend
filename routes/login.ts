@@ -14,7 +14,7 @@ loginRouter.use(session({
     unset: 'destroy',
     resave: false,
     saveUninitialized: false,
-    cookie: { path: '/', httpOnly: false, secure: false/* XXX true for prod*/, maxAge: 180000 }
+    cookie: { path: '/', httpOnly: false, secure: process.env.NODE_ENV === 'production', maxAge: 180000 }
 })); 
 
 /*
