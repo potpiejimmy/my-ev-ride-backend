@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "PORT=3003 NODE_ENV=production API_ORIGIN=https://doogetha.com forever start dist/bin/www.js",
+    "start": "node ./bin/www.js",
+    "starttestenv": "PORT=3003 NODE_ENV=production API_ORIGIN=https://doogetha.com forever start dist/bin/www.js",
     "develop": "tsc && concurrently \"tsc -w\" \"nodemon dist/bin/www.js\" ",
-    "build": "tsc",
+    "build": "tsc && cp -r package.json .ebextensions dist && cd dist && zip -r dist.zip *",
     "postinstall": "npm run build"
   },
   "private": true,
