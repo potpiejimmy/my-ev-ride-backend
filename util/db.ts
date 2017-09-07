@@ -6,7 +6,7 @@ function getPool():IPool {
     if (!pool) {
         pool = createPool({
             connectionLimit : 10,
-            host            : 'localhost',
+            host            : process.env.DB_HOST || 'localhost',
             user            : 'myevride',
             password        : 'myevride',
             database        : 'myevride'
