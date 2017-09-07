@@ -2,19 +2,21 @@ import { Router, Request, Response, NextFunction } from "express";
 import * as config from "../config";
 import * as Login from "../business/login";
 import * as passport from 'passport';
-import * as session from 'express-session'; // only needed for Google/FB login process
+import * as session from 'cookie-session'; // only needed for Google/FB login process
 
 const loginRouter: Router = Router();
 
-// session only needed for google/FB login.
-// keep the session-less JWT for 3 minutes in session memory to be obtained via GET /login API call
+// session cookie only needed for google/FB login.
+// keep the session-less JWT for 3 minutes in session cookie to be obtained via GET /login API call
+// this is to simplify/unify obtaining of the JWT from the angular app
 loginRouter.use(session({
     name: 'my-ev-ride-log-in',
     secret: 'temporary',
-    unset: 'destroy',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { path: '/', httpOnly: false, secure: process.env.NODE_ENV === 'production', maxAge: 180000 }
+    // cookie options:
+    httpOnly: false,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 180000,
+    signed: false
 })); 
 
 /*
