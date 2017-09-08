@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `name` VARCHAR(128) NOT NULL,
   `type` TINYINT NOT NULL DEFAULT 0,
   `roles` VARCHAR(255) NOT NULL DEFAULT 'user',
-  `password` VARCHAR(32) NULL,
+  `password` VARCHAR(128) NULL,
   `pw_status` TINYINT NOT NULL DEFAULT 0,
   `email` VARCHAR(128) NULL,
   `display_name` VARCHAR(128) NULL,

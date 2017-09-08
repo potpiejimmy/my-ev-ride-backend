@@ -4,7 +4,7 @@ import * as db from "../util/db";
 
 export function login(username: string, password: string): Promise<any> {
     return findUser(username).then(user => {
-        if (user && crypto.createHash('md5').update(password || '').digest("hex") == user.password) {
+        if (user && crypto.createHash('sha256').update(password || '').digest("hex") == user.password) {
             console.info("Login successful");
             return authenticate(user);
         } else {
@@ -26,7 +26,7 @@ export function register(user: any): Promise<any> {
         if (found) return {"result": "Sorry, the user name is already in use."};
         // insert new user
         if (!user.password || user.password.length < 8) return {"result": "Sorry, bad password"};
-        user.password = crypto.createHash('md5').update(user.password).digest("hex");
+        user.password = crypto.createHash('sha256').update(user.password).digest("hex");
         delete user.roles;
         return insertUser(user).then(() => readAndAuthenticate(user.name));
     });
