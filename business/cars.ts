@@ -38,7 +38,7 @@ export function deleteCar(user: any, id: number) {
 }
 
 function shortenDisplayName(e: string): string {
-    let spacePos = e.indexOf(" ");
+    let spacePos = e ? e.indexOf(" ") : -1;
     if (spacePos > 0) return e.substr(0, spacePos);
     return e;
 }
