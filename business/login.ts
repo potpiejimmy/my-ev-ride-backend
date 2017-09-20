@@ -26,6 +26,7 @@ export function register(user: any): Promise<any> {
         if (found) return {"result": "Sorry, the user name is already in use."};
         // insert new user
         if (!user.password || user.password.length < 8) return {"result": "Sorry, bad password"};
+        //add here google api call -> use node-fetch for post request
         user.password = crypto.createHash('sha256').update(user.password).digest("hex");
         delete user.roles;
         return insertUser(user).then(() => readAndAuthenticate(user.name));
