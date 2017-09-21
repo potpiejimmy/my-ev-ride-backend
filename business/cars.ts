@@ -6,7 +6,8 @@ import * as utils from "../util/utils";
  * @return list of cars
  */
 export function getCars(lon: number, lat: number): Promise<any> {
-    return db.querySingle("SELECT asset.*,user.display_name FROM asset JOIN user ON asset.user_id=user.id ORDER BY (POW((lon-?),2) + POW((lat-?),2)) LIMIT 1000",[lon,lat]).then(res => {
+    return db.querySingle("SELECT asset.*,user.display_name FROM asset JOIN user ON asset.user_id=user.id ORDER BY (POW((lon-?),2) + POW((lat-?),2)) LIMIT 1000",
+        [isNaN(lon) ? 0 : lon, isNaN(lat) ? 0 : lat]).then(res => {
         res.forEach(e => e.display_name = shortenDisplayName(e.display_name));
         return res;
     });

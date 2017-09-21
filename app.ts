@@ -55,7 +55,7 @@ if (app.get('env') === 'production') {
 
 // catch 404 and forward to error handler
 app.use(function(req: express.Request, res: express.Response, next) {
-  let err = new Error('Not Found');
+  let err = new Error('Not Found: ' + req.originalUrl);
   next(err);
 });
 
