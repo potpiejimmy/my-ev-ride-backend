@@ -7,11 +7,11 @@
     "starttestenv": "PORT=3003 NODE_ENV=test JWT_SECRET=other API_ORIGIN=https://doogetha.com forever start dist/bin/www.js",
     "develop": "tsc && concurrently \"tsc -w\" \"nodemon dist/bin/www.js\" ",
     "build": "tsc && cp -r package.json .ebextensions dist && cd dist && zip -r dist.zip *",
-    "postinstall": "npm run build"
+    "postinstall": "tsc"
   },
   "private": true,
   "dependencies": {
-    "body-parser": "^1.17.2",
+    "body-parser": "^1.18.0",
     "compression": "^1.7.0",
     "cookie-session": "^1.3.1",
     "express": "^4.15.4",
@@ -25,7 +25,7 @@
   "devDependencies": {
     "@types/node": "^6.0.80",
     "concurrently": "^3.5.0",
-    "nodemon": "^1.11.0",
+    "nodemon": "^1.12.0",
     "typescript": "~2.5.0"
   }
 }
