@@ -1,6 +1,20 @@
 import * as crypto from "crypto";
 import * as auth from "../util/auth";
 import * as db from "../util/db";
+import * as nodeFetch from "node-fetch";
+import * as FormData from 'form-data';
+
+function callGoogleCaptchaBackend(captcha : string) : Promise<any> {
+    var form = new FormData();
+    form.append('secret', process.env.CAPTCHA_SECRET || '6Lc6ozEUAAAAAHYoYDzQ9gaZOHu8nj_UGHtmy2Fd');
+    form.append('response', captcha);
+    return nodeFetch('https://www.google.com/recaptcha/api/siteverify', { method: 'POST', body: form })
+        .then(function(res) {
+            return res.json();
+        }).catch(function(err) {
+        console.log(err);
+    });
+};
 
 export function login(username: string, password: string): Promise<any> {
     return findUser(username).then(user => {
@@ -27,9 +41,17 @@ export function register(user: any): Promise<any> {
         // insert new user
         if (!user.password || user.password.length < 8) return {"result": "Sorry, bad password"};
         //add here google api call -> use node-fetch for post request
-        user.password = crypto.createHash('sha256').update(user.password).digest("hex");
-        delete user.roles;
-        return insertUser(user).then(() => readAndAuthenticate(user.name));
+        return callGoogleCaptchaBackend(user.captcha).then(found => {
+            if(found && found.success) {
+                console.log(JSON.stringify(found));
+                user.password = crypto.createHash('sha256').update(user.password).digest("hex");
+                delete user.captcha;
+                delete user.roles;
+                return insertUser(user).then(() => readAndAuthenticate(user.name));
+            } else {
+                return {"result": "Sorry, I don`t think you are a real person! Please try again."}
+            }
+        })
     });
 }
 
