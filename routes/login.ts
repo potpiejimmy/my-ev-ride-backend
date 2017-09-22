@@ -93,4 +93,25 @@ passport.use(new GoogleStrategy({
 
 // ---
 
+// --- Passport: Facebook Login ---
+
+var FacebookStrategy = require('passport-facebook').Strategy;
+
+passport.use(new FacebookStrategy({
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: (process.env.API_ORIGIN ? process.env.API_ORIGIN : '') + "/myevride/api/login/facebook/callback"
+  }, (accessToken, refreshToken, profile, cb) => {
+    //      console.log(JSON.stringify(profile));
+          let user = {
+              name: profile.emails[0].value,
+              email: profile.emails[0].value,
+              display_name: profile.displayName
+          }
+          return cb(null, user);
+      }
+));
+
+// ---
+
 export { loginRouter }
