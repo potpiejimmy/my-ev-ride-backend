@@ -119,9 +119,10 @@ passport.use(new GoogleStrategy({
 var FacebookStrategy = require('passport-facebook').Strategy;
 
 passport.use(new FacebookStrategy({
-    clientID: config.facebookAuthClientId,
-    clientSecret: config.facebookAuthClientSecret,
-    callbackURL: (process.env.API_ORIGIN ? process.env.API_ORIGIN : '') + "/myevride/api/login/facebook/callback"
+    clientID: config.facebookAppId,
+    clientSecret: config.facebookAppSecret,
+    callbackURL: (process.env.API_ORIGIN ? process.env.API_ORIGIN : '') + "/myevride/api/login/facebook/callback",
+    profileFields: ['displayName', 'email']
   }, (accessToken, refreshToken, profile, cb) => {
     //      console.log(JSON.stringify(profile));
           let user = {
