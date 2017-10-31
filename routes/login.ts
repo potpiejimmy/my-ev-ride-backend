@@ -67,6 +67,27 @@ loginRouter.get('/google/callback', passport.authenticate('google', { failureRed
         .catch(err => res.json(err));
 });
 
+// --- login with Facebook ---
+loginRouter.get('/facebook',
+(req,res,next) => {
+    req.session.returnurl = req.query.returnurl;
+    next();
+},
+passport.authenticate('facebook', { scope: ['email'] })
+);
+
+// --- login with Facebook callback ---
+loginRouter.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
+// create user from facebook profile information
+Login.loginCreate(req.user)
+    .then(token => {
+        // store token temporarily in session
+        req.session.jwt = token;
+        res.redirect(req.session.returnurl);
+    })
+    .catch(err => res.json(err));
+});
+
 // --- Setup Passport.js ---
 
 passport.serializeUser((user, cb) => {cb(null, user);});
@@ -89,6 +110,28 @@ passport.use(new GoogleStrategy({
       }
       return cb(null, user);
   }
+));
+
+// ---
+
+// --- Passport: Facebook Login ---
+
+var FacebookStrategy = require('passport-facebook').Strategy;
+
+passport.use(new FacebookStrategy({
+    clientID: config.facebookAppId,
+    clientSecret: config.facebookAppSecret,
+    callbackURL: (process.env.API_ORIGIN ? process.env.API_ORIGIN : '') + "/myevride/api/login/facebook/callback",
+    profileFields: ['displayName', 'email']
+  }, (accessToken, refreshToken, profile, cb) => {
+    //      console.log(JSON.stringify(profile));
+          let user = {
+              name: profile.emails[0].value,
+              email: profile.emails[0].value,
+              display_name: profile.displayName
+          }
+          return cb(null, user);
+      }
 ));
 
 // ---
