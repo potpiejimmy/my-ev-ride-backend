@@ -43,7 +43,6 @@ export function register(user: any): Promise<any> {
         //add here google api call -> use node-fetch for post request
         return callGoogleCaptchaBackend(user.captcha).then(found => {
             if(found && found.success) {
-                console.log(JSON.stringify(found));
                 user.password = crypto.createHash('sha256').update(user.password).digest("hex");
                 delete user.captcha;
                 delete user.roles;
