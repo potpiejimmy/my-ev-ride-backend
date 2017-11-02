@@ -27,7 +27,12 @@ export function saveCar(user: any, car: any) {
         return db.querySingle("UPDATE asset SET ? WHERE id=?",[car, car.id]);
     } else {
         car.user_id = user.id;
-        return db.querySingle("INSERT INTO asset SET ?", [car]);
+        return getCarsForUser(user).then(cars => {
+            if (cars.length >= 5)
+                throw "Sorry, you cannot create more than 5 cars in your account.";
+            else
+                return db.querySingle("INSERT INTO asset SET ?", [car]);
+        });
     }
 }
 
