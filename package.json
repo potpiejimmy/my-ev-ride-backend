@@ -7,7 +7,8 @@
     "starttestenv": "PORT=3003 NODE_ENV=test JWT_SECRET=other API_ORIGIN=https://doogetha.com forever start dist/bin/www.js",
     "develop": "tsc && concurrently \"tsc -w\" \"nodemon dist/bin/www.js\" ",
     "build": "tsc && cp -r package*.json .ebextensions dist && cd dist && zip -r dist.zip *",
-    "postinstall": "tsc"
+    "postinstall": "tsc",
+    "createDB": "mysql -umyevride -pmyevride myevride < db/scripts/drop.sql && mysql -umyevride -pmyevride myevride < db/scripts/create.sql && mysql -umyevride -pmyevride myevride < db/scripts/populate.sql"
   },
   "private": true,
   "dependencies": {
