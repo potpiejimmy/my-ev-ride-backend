@@ -100,7 +100,7 @@ var GoogleStrategy = require('passport-google-oauth20').Strategy;
 passport.use(new GoogleStrategy({
     clientID: config.googleAuthClientId,
     clientSecret: config.googleAuthClientSecret,
-    callbackURL: (process.env.API_ORIGIN ? process.env.API_ORIGIN : '') + "/myevride/api/login/google/callback"
+    callbackURL: config.apiOrigin,
   }, (accessToken, refreshToken, profile, cb) => {
 //      console.log(JSON.stringify(profile));
       let user = {
@@ -121,7 +121,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 passport.use(new FacebookStrategy({
     clientID: config.facebookAppId,
     clientSecret: config.facebookAppSecret,
-    callbackURL: (process.env.API_ORIGIN ? process.env.API_ORIGIN : '') + "/myevride/api/login/facebook/callback",
+    callbackURL: config.apiOrigin,
     profileFields: ['displayName', 'email']
   }, (accessToken, refreshToken, profile, cb) => {
     //      console.log(JSON.stringify(profile));

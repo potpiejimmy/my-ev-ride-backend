@@ -1,4 +1,5 @@
 import { IPool, IConnection, IError, createPool } from 'mysql';
+import * as config from '../config';
 
 var pool : IPool;
 
@@ -6,10 +7,10 @@ function getPool():IPool {
     if (!pool) {
         pool = createPool({
             connectionLimit : 10,
-            host            : process.env.DB_HOST || 'localhost',
-            user            : 'myevride',
-            password        : 'myevride',
-            database        : 'myevride'
+            host            : config.dbHost,
+            user            : config.dbUser,
+            password        : config.dbPassword,
+            database        : config.dbSchema
         });
     }
     return pool;

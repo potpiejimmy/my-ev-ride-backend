@@ -3,10 +3,11 @@ import * as auth from "../util/auth";
 import * as db from "../util/db";
 import * as nodeFetch from "node-fetch";
 import * as FormData from 'form-data';
+import * as config from '../config';
 
 function callGoogleCaptchaBackend(captcha : string) : Promise<any> {
     var form = new FormData();
-    form.append('secret', process.env.CAPTCHA_SECRET || '6Lc6ozEUAAAAAHYoYDzQ9gaZOHu8nj_UGHtmy2Fd');
+    form.append('secret', config.captchaSecret);
     form.append('response', captcha);
     return nodeFetch('https://www.google.com/recaptcha/api/siteverify', { method: 'POST', body: form })
         .then(function(res) {
