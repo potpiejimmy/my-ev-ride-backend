@@ -3,10 +3,11 @@ My EV Ride Backend
 
     mysql -uroot -p
     > create database myevride default charset utf8;
-    > grant all on myevride.* to 'myevride'@'localhost' identified by 'myevride';
+    > create user 'myevride'@'localhost' identified with mysql_native_password by 'myevride';
+    > grant all on myevride.* to 'myevride'@'localhost';
     > quit
     
-    mysql -umyevride -p myevride < db/scripts/create.sql
+    mysql -umyevride -pmyevride < db/scripts/create.sql
     mysql -umyevride -p myevride < db/scripts/populate.sql
     
 Legt einen User admin/admin an.
