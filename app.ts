@@ -24,9 +24,9 @@ app.use(passport.initialize());
 // Allow origins only from the following domains:
 let corsWhitelist = [
   'http://localhost:4200',
-  'https://app.thliese.net',
   'https://app.siedentopf.xyz',
-  'https://app.my-ev-ride.com'
+  'https://app.my-ev-ride.com',
+  'https://stageapp.my-ev-ride.com'
 ]
 
 // add CORS headers
